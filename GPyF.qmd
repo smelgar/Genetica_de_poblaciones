@@ -360,6 +360,10 @@ p2 <- ggplot(structure_humans, aes(x=Individuo, y=value, fill=variable)) +
   - Conservación de especies
   - Estudios de adaptación local
   - Antropología genética
+  
+<iframe width="900" height="10000" src="https://keholsinger.shinyapps.io/F-statistics/" title="Frecuencias alélicas a genotípicas suponiendo equilibrio H-W">
+
+</iframe>
 
 
 ## Estadísticas F
