@@ -1,11 +1,17 @@
 ---
 title: Genética de Poblaciones y Farmacogenética
-author: Tu Nombre (o el nombre que desees)
-format:
+author: Sergio Melgar
+lang: es-MX
+format: 
   revealjs:
     theme: simple
     slide-number: c/t
+    show-slide-number: all
+    preview-links: true
     scrollable: true
+    plugins: [notes, chalkboard]
+    chalkboard:
+       src: chalkboard.json
 ---
 
 ## Introducción a la Genética de Poblaciones
@@ -16,10 +22,72 @@ format:
     -   **Frecuencia alélica:** Proporción de un alelo específico en una población.
     -   **Frecuencia genotípica:** Proporción de un genotipo específico en una población.
     -   **Equilibrio de Hardy-Weinberg:** Un modelo nulo que describe una población no evolutiva.
-
+    
 ```{=html}
 <iframe width="900" height="10000" src="https://bolnicklab.shinyapps.io/Geno_to_allele_frequencies/" title="Frecuencias genotípicas a alélicas"></iframe>
 ```
+    
+## Equilibrio de Hardy-Weinberg
+**Principio básico**:
+
+$$
+p^2 + 2pq + q^2 = 1
+$$
+
+Donde:
+- $p$ = frecuencia del alelo A
+
+- $q$ = frecuencia del alelo a ($q = 1 - p$)
+
+- $p^2$ = frecuencia de AA
+
+- $2pq$ = frecuencia de Aa
+
+- $q^2$ = frecuencia de aa
+
+
+## Equilibio Hardy-Weinberg
+
+$$
+p^2 + 2pq + q^2 = 1
+$$
+
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 10
+# Simulación H-W
+library(ggplot2)
+p <- seq(0, 1, 0.01)
+hw_df <- data.frame(
+  p = p,
+  AA = p^2,
+  Aa = 2*p*(1-p),
+  aa = (1-p)^2
+)
+
+ggplot(hw_df, aes(x = p)) +
+  geom_line(aes(y = AA, color = "AA"), linewidth = 1.5) +
+  geom_line(aes(y = Aa, color = "Aa"), linewidth = 1.5) +
+  geom_line(aes(y = aa, color = "aa"), linewidth = 1.5) +
+  labs(title = "Frecuencias genotípicas bajo H-W",
+       x = "Frecuencia alélica (p)",
+       y = "Frecuencia genotípica",
+       color = "Genotipo") +
+  scale_color_manual(values = c("AA" = "#E69F00", 
+                               "Aa" = "#56B4E9", 
+                               "aa" = "#009E73")) +
+  theme_minimal(base_size = 14)
+```
+
+
+
+
+
+
+
 
 ## Frecuencias alélicas a genotípicas suponiendo equilibrio H-W"
 
@@ -128,6 +196,312 @@ ggplot(data, aes(x=Generation, y=Frequency, color=factor(Replicate))) +
   ylim(0, 1)
 ```
 
+
+## Deriva génica
+
+<iframe width="900" height="10000" src="https://cjbattey.shinyapps.io/driftR/" title="Frecuencias alélicas a genotípicas suponiendo equilibrio H-W">
+</iframe>
+
+## Introducción a la Estructura Poblacional
+
+- **Problema central**: Identificar agrupamientos genéticos en poblaciones naturales
+- **Aplicaciones**:
+  - Estudios de ancestría
+  - Conservación de especies
+  - Epidemiología genética
+  - Agricultura (mejoramiento de cultivos)
+
+## Métodos de Análisis
+
+### Dos enfoques complementarios:
+1. **PCA (Análisis de Componentes Principales)**
+   - Método multivariado no paramétrico
+   - Reduce dimensionalidad
+
+2. **STRUCTURE**
+   - Modelo bayesiano de agrupamiento
+   - Asume poblaciones en equilibrio de Hardy-Weinberg
+   
+## Interpretación del PCA Genético
+
+- **Cada punto** = un individuo
+- **Ejes** = Componentes principales (combinaciones lineales de SNPs)
+- **Varianza explicada** = % de variación genética capturada
+- **Agrupamientos** = Similitud genética
+
+**Ventajas**:
+- Rápido computacionalmente
+- Visualización intuitiva
+- No asume modelo poblacional
+
+## Ejemplo:
+
+```{r}
+#| fig-height: 6
+#| fig-width: 8
+# Código para cargar y visualizar datos reales (requiere descarga previa)
+library(ggrepel)
+
+# Datos simulados basados en 1000 Genomes
+superpops <- c("EUR", "AFR", "EAS", "SAS", "AMR")
+pops_real <- factor(rep(superpops, each=20))
+set.seed(456)
+pca_real <- data.frame(
+  PC1 = c(rnorm(20, -5, 1), rnorm(20, 5, 1), rnorm(20, 0, 1), 
+         rnorm(20, 3, 1), rnorm(20, -3, 1)),
+  PC2 = c(rnorm(20, 5, 1), rnorm(20, -2, 1), rnorm(20, 7, 1),
+         rnorm(20, 1, 1), rnorm(20, 1, 1)),
+  Population = pops_real
+)
+
+ggplot(pca_real, aes(x=PC1, y=PC2, color=Population, label=Population)) +
+  geom_point(size=3) +
+  geom_text_repel(max.overlaps=Inf, show.legend=FALSE) +
+  labs(title="PCA - Proyecto 1000 Genomas (Ejemplo Simulado)",
+       x="PC1 (Principal Component 1)",
+       y="PC2 (Principal Component 2)") +
+  theme_minimal(base_size=14) +
+  scale_color_brewer(palette="Dark2")
+```
+
+## Método STRUCTURE: Fundamentos
+
+- Algoritmo bayesiano (Pritchard et al. 2000)
+- Modela individuos como mezclas de K poblaciones ancestrales
+- **Salida clave**:
+  - Coeficientes de adscripción (q)
+  - $0 \leq q \leq 1$ por individuo
+
+## Visualización de Resultados de STRUCTURE
+
+```{r}
+#| fig-height: 6
+#| fig-width: 10
+# Simulación de resultados de STRUCTURE
+library(ggplot2)
+library(reshape2)
+library(dplyr)
+
+set.seed(789)
+K <- 3  # Número de poblaciones
+n <- 30 # Individuos por población
+
+# Crear datos de adscripción
+structure_data <- data.frame(
+  Individuo = 1:(3*n),
+  Pob1 = c(rbeta(n, 10, 1), rbeta(n, 1, 1), rbeta(n, 1, 10)),
+  Pob2 = c(rbeta(n, 1, 10), rbeta(n, 10, 1), rbeta(n, 1, 1)),
+  Pob3 = c(rbeta(n, 1, 1), rbeta(n, 1, 10), rbeta(n, 10, 1)),
+  Grupo = rep(c("Población A", "Población B", "Población C"), each=n)
+)
+
+# Ordenar para mejor visualización
+structure_data <- structure_data %>%
+  arrange(Grupo, desc(Pob1), desc(Pob2), desc(Pob3))
+
+# Transformar a formato largo
+melted_data <- melt(structure_data, id.vars=c("Individuo", "Grupo"))
+
+# Graficar
+ggplot(melted_data, aes(x=Individuo, y=value, fill=variable)) +
+  geom_bar(position="fill",stat="identity", width=1) +
+  facet_grid(~Grupo, scales="free_x", space="free_x") +
+  labs(title="Resultados Simulados de STRUCTURE (K=3)",
+       y="Coeficiente de Adscripción (q)", x="Individuos") +
+  scale_fill_brewer(palette="Set1", name="Población Ancestral") +
+  theme_minimal(base_size=12) +
+  theme(axis.text.x=element_blank(),
+        panel.spacing=unit(0.1, "lines"))
+```
+
+
+## Ejemplo: Humanos
+
+```{r}
+#| fig-height: 6
+#| fig-width: 10
+# Visualización combinada PCA + STRUCTURE
+library(patchwork)
+
+# PCA
+p1 <- ggplot(pca_real, aes(x=PC1, y=PC2, color=Population)) +
+  geom_point(size=2) +
+  labs(title="PCA - Diversidad Humana") +
+  theme_minimal()
+
+# STRUCTURE (simulado para mismos individuos)
+library(reshape)
+set.seed(654)
+structure_humans <- data.frame(
+  Individuo = 1:100,
+  AFR = c(rbeta(20, 0.9, 0.1), rep(0.01, 80)),
+  EUR = c(rep(0.01, 20), rbeta(20, 0.9, 0.1), rep(0.01, 60)),
+  EAS = c(rep(0.01, 40), rbeta(20, 0.9, 0.1), rep(0.01, 40)),
+  SAS = c(rep(0.01, 60), rbeta(20, 0.9, 0.1), rep(0.01, 20)),
+  AMR = c(rep(0.01, 80), rbeta(20, 0.9, 0.1))
+) %>% melt(id.vars="Individuo")
+
+p2 <- ggplot(structure_humans, aes(x=Individuo, y=value, fill=variable)) +
+  geom_bar(position="fill",stat="identity", width=1) +
+  labs(title="STRUCTURE (K=5)") +
+  scale_fill_brewer(palette="Dark2") +
+  theme_minimal() +
+  theme(axis.text.x=element_blank())
+
+(p1 / p2) + plot_layout(heights=c(1, 0.5))
+```
+
+## Estadísticas F
+
+- **Desarrolladas por**: Sewall Wright (1951)
+- **Propósito**: Cuantificar estructuración genética poblacional
+- **Rango**: 0 (no diferenciación) a 1 (diferenciación completa)
+- **Aplicaciones**:
+  - Conservación de especies
+  - Estudios de adaptación local
+  - Antropología genética
+
+
+## Estadísticas F
+
+```{r}
+#| fig-height: 5
+#| fig-width: 8
+# Tabla de estadísticas F
+library(knitr)
+
+f_stats <- data.frame(
+  "Estadística" = c("$F_{IT}$", "$F_{IS}$", "$F_{ST}$"),
+  "Descripción" = c("Endogamia total en individuos", 
+                    "Endogamia dentro de poblaciones", 
+                    "Diferenciación entre poblaciones"),
+  "Fórmula" = c("$\\frac{H_T - H_I}{H_T}$", 
+                "$\\frac{H_S - H_I}{H_S}$", 
+                "$\\frac{H_T - H_S}{H_T}$"),
+  "Interpretación" = c("Desviación de H-W en toda la población",
+                      "Déficit de heterocigotos dentro de poblaciones",
+                      "Proporción de diversidad debida a diferencias entre poblaciones")
+)
+
+kable(f_stats, caption = "Principales estadísticas F de Wright", align = c("l", "l", "c", "l"))
+```
+$H_I$ : media de la f(Aa) observada.
+$H_T$ : media de la f(Aa) esperada.
+$H_T$ : f(Aa) esperada global.
+
+
+
+
+## Otras Medidas de Distancia Poblacional
+
+### 1. Distancia de Nei (1972):
+
+$$
+D = -\ln \left( \frac{J_{XY}}{\sqrt{J_X J_Y}} \right)
+$$
+
+Donde:
+- $J_X$, $J_Y$ = homocigosidad en poblaciones X e Y
+- $J_{XY}$ = heterocigosidad entre poblaciones
+
+### 2. Distancia de Reynolds (1983):
+
+$$
+\theta = \frac{(p_X - p_Y)^2}{4(1 - \sum p_i^2)}
+$$
+
+## Comparación de Medidas de Distancia
+
+```{r}
+#| fig-height: 6
+#| fig-width: 9
+# Simulación comparativa
+library(ggplot2)
+library(reshape2)
+
+# Generar datos de frecuencias para 5 poblaciones
+set.seed(42)
+pops <- paste0("Pop", 1:5)
+freqs <- data.frame(
+  SNP1 = c(0.9, 0.8, 0.5, 0.3, 0.1),
+  SNP2 = c(0.1, 0.2, 0.5, 0.7, 0.9),
+  row.names = pops
+)
+
+# Calcular diferentes distancias
+distances <- data.frame(
+  Comparación = c("Pop1-Pop2", "Pop1-Pop3", "Pop1-Pop5"),
+  FST = c(0.05, 0.25, 0.75),
+  Nei = c(0.02, 0.15, 0.55),
+  Reynolds = c(0.03, 0.20, 0.65)
+)
+
+# Graficar
+melted_dist <- melt(distances, id.vars="Comparación")
+ggplot(melted_dist, aes(x=Comparación, y=value, fill=variable)) +
+  geom_bar(stat="identity", position="dodge") +
+  labs(title="Comparación de Medidas de Distancia Genética",
+       y="Valor de distancia", 
+       fill="Medida") +
+  theme_minimal(base_size=14) +
+  scale_fill_brewer(palette="Set1")
+```
+
+## Visualización de Matrices de Distancia
+
+```{r}
+#| fig-height: 6
+#| fig-width: 8
+# Heatmap de distancias
+library(pheatmap)
+
+# Generar datos de frecuencias para 5 poblaciones
+set.seed(42)
+pops <- paste0("Pop", 1:5)
+freqs <- data.frame(
+  SNP1 = c(0.9, 0.8, 0.5, 0.3, 0.1),
+  SNP2 = c(0.1, 0.2, 0.5, 0.7, 0.9),
+  row.names = pops
+)
+
+# Matriz de distancias simuladas
+dist_matrix <- matrix(c(
+  0.00, 0.05, 0.25, 0.40, 0.75,
+  0.05, 0.00, 0.20, 0.35, 0.70,
+  0.25, 0.20, 0.00, 0.15, 0.50,
+  0.40, 0.35, 0.15, 0.00, 0.45,
+  0.75, 0.70, 0.50, 0.45, 0.00
+), nrow=5, byrow=TRUE, dimnames=list(pops, pops))
+
+pheatmap(dist_matrix, 
+         main="Matriz de Distancias FST entre Poblaciones",
+         color=colorRampPalette(c("white", "blue", "darkred"))(20),
+         cluster_rows=FALSE, cluster_cols=FALSE,
+         display_numbers=TRUE, number_format="%.2f")
+```
+
+
+
+
+
+## Aplicaciones en Genómica de Poblaciones
+
+1. **Identificación de poblaciones discretas**
+2. **Detección de selección natural**:
+   - F<sub>ST</sub> outliers
+   - Comparación con distribución neutral esperada
+3. **Diseño de estrategias de conservación**
+4. **Estudios de asociación genómica (GWAS)**:
+   - Control de estructura poblacional
+
+
+
+
+
+
+
+
+
 ## {background-iframe="https://bolnicklab.shinyapps.io/HWEdemo/"} {visibility="hidden"}
 
 ## {background-color="aquamarine"} {visibility="hidden"}
@@ -138,7 +512,7 @@ ggplot(data, aes(x=Generation, y=Frequency, color=factor(Replicate))) +
 
 (Another slide with no title)
 
-## Prueba:
+## Prueba: {visibility="hidden"}
 
 ::: {.quarto-figure .quarto-figure-center}
 <iframe src="https://www.sebc.me/bioblog/labs/hwe-calculator" width="100%" height="500px" frameborder="0">
@@ -155,7 +529,7 @@ ggplot(data, aes(x=Generation, y=Frequency, color=factor(Replicate))) +
     -   Transportadores de fármacos.
     -   Receptores y otras dianas farmacológicas.
 
-## Genes CYP450: Un Ejemplo Crucial
+## Citocromo P450
 
 -   La superfamilia de enzimas citocromo P450 (CYP) es fundamental para el metabolismo de muchos fármacos.
 -   **Polimorfismos genéticos** en los genes CYP pueden llevar a variaciones en la actividad enzimática:
@@ -203,3 +577,7 @@ ggplot(data, aes(x=Generation, y=Frequency, color=factor(Replicate))) +
 -   La genética de poblaciones es fundamental para entender la variación en genes farmacogenéticos.
 -   Las diferencias en las frecuencias alélicas entre poblaciones tienen implicaciones clínicas importantes para la respuesta a los fármacos.
 -   La integración de la genética de poblaciones en la farmacogenética es crucial para avanzar hacia una medicina más personalizada y equitativa.
+
+
+
+## Gracias
