@@ -1,0 +1,205 @@
+---
+title: Genética de Poblaciones y Farmacogenética
+author: Tu Nombre (o el nombre que desees)
+format:
+  revealjs:
+    theme: simple
+    slide-number: c/t
+    scrollable: true
+---
+
+## Introducción a la Genética de Poblaciones
+
+-   La genética de poblaciones estudia la variación genética dentro y entre poblaciones.
+-   Se enfoca en la frecuencia de los alelos y genotipos y cómo cambian con el tiempo.
+-   Conceptos clave:
+    -   **Frecuencia alélica:** Proporción de un alelo específico en una población.
+    -   **Frecuencia genotípica:** Proporción de un genotipo específico en una población.
+    -   **Equilibrio de Hardy-Weinberg:** Un modelo nulo que describe una población no evolutiva.
+
+```{=html}
+<iframe width="900" height="10000" src="https://bolnicklab.shinyapps.io/Geno_to_allele_frequencies/" title="Frecuencias genotípicas a alélicas"></iframe>
+```
+
+## Frecuencias alélicas a genotípicas suponiendo equilibrio H-W"
+
+```{=html}
+<iframe width="900" height="10000" src="https://bolnicklab.shinyapps.io/Genotype_frequencies/" title="Frecuencias alélicas a genotípicas suponiendo equilibrio H-W"></iframe>
+```
+
+## Equilibrio Hardy-Weinberg
+
+```{=html}
+<iframe  src="https://bolnicklab.shinyapps.io/HWEdemo/" title="Equilibrio Hardy-Weinberg" style="width:100%; height:150%; zoom: 0.75;"></iframe>
+```
+
+## Selección
+
+[![](https://upload.wikimedia.org/wikipedia/commons/b/ba/Consequences_of_Drift_and_Selection_in_the_Kalash.png)](https://commons.wikimedia.org/wiki/File:Consequences_of_Drift_and_Selection_in_the_Kalash.png)
+
+## Selección
+
+-   La cantidad máxima de hijos en la siguiente generación está medida por la aptitud, adecuabilidad o "fitness"
+-   El coeficiente de selección *s* es la reducción en la aptitud en un genotipo.
+-   La selección a favor de un homocigótico permite un aumento de la frecuencia del alelo que porta.
+
+<iframe width="900" height="10000" src="https://cjbattey.shinyapps.io/driftR/" title="Frecuencias alélicas a genotípicas suponiendo equilibrio H-W">
+
+</iframe>
+
+## Flujo génico (migración)
+
+-   El flujo génico permite el intercambio de alelos entre poblaciones y su consecuencia es la homogenización de las mismas.
+
+<iframe width="900" height="10000" src="https://cjbattey.shinyapps.io/driftR/" title="Frecuencias alélicas a genotípicas suponiendo equilibrio H-W">
+
+</iframe>
+
+## Deriva génica
+
+[![Ejemplo de derivva génica](https://upload.wikimedia.org/wikipedia/commons/0/0b/Random_sampling_genetic_drift.svg)](https://commons.wikimedia.org/wiki/File:Random_sampling_genetic_drift.svg)
+
+## ¿Qué es la Deriva Génica?
+
+-   Cambio aleatorio en las frecuencias alélicas entre generaciones
+-   Efecto más pronunciado en poblaciones pequeñas
+-   Uno de los mecanismos evolutivos fundamentales
+-   Concepto desarrollado por Sewall Wright (1931)
+
+## Características
+
+-   **No direccional**: Los cambios son aleatorios
+-   **Irreversible**: Cuando se alcanza la fijación o pérdida del alelo
+-   **Dependiente del tamaño poblacional**:
+    -   $N_e$ = Tamaño poblacional efectivo
+-   **Resultados posibles**:
+    -   Fijación ($p=1$)
+    -   Pérdida ($p=0$)
+    -   Fluctuación continua
+
+## Deriva en Poblaciones Pequeñas vs. Grandes
+
+```{r}
+#| fig-height: 6
+#| fig-width: 10
+library(ggplot2)
+set.seed(123)
+
+# Parámetros
+generations <- 100
+p0 <- 0.5
+n_small <- 20  # Población pequeña
+n_large <- 200 # Población grande
+reps <- 5      # Réplicas
+
+simulate_drift <- function(N, p0, generations) {
+  p <- numeric(generations)
+  p[1] <- p0
+  for (i in 2:generations) {
+    p[i] <- rbinom(1, N, p[i-1])/N
+  }
+  return(p)
+}
+
+# Simular
+data <- data.frame()
+for (rep in 1:reps) {
+  small <- simulate_drift(n_small, p0, generations)
+  large <- simulate_drift(n_large, p0, generations)
+  data <- rbind(data, 
+                data.frame(Generation=1:generations, 
+                          Frequency=small, 
+                          Size="Pequeña (N=20)", 
+                          Replicate=rep),
+                data.frame(Generation=1:generations, 
+                          Frequency=large, 
+                          Size="Grande (N=200)", 
+                          Replicate=rep))
+}
+
+# Graficar
+ggplot(data, aes(x=Generation, y=Frequency, color=factor(Replicate))) +
+  geom_line(linewidth=1) +
+  facet_wrap(~Size) +
+  labs(title="Deriva Génica en Diferentes Tamaños Poblacionales",
+       y="Frecuencia alélica (p)", 
+       color="Réplica") +
+  theme_minimal(base_size=14) +
+  ylim(0, 1)
+```
+
+## {background-iframe="https://bolnicklab.shinyapps.io/HWEdemo/"} {visibility="hidden"}
+
+## {background-color="aquamarine"} {visibility="hidden"}
+
+(A slide with no title)
+
+## {background-color="black" background-image="https://placekitten.com/100/100" background-size="100px" background-repeat="repeat"} {visibility="hidden"}
+
+(Another slide with no title)
+
+## Prueba:
+
+::: {.quarto-figure .quarto-figure-center}
+<iframe src="https://www.sebc.me/bioblog/labs/hwe-calculator" width="100%" height="500px" frameborder="0">
+
+</iframe>
+:::
+
+## Farmacogenética: Individualizando la Medicina
+
+-   La farmacogenética examina cómo la variación genética de un individuo afecta su respuesta a los fármacos.
+-   El objetivo es optimizar la terapia farmacológica, maximizando la eficacia y minimizando los efectos adversos.
+-   Genes importantes en farmacogenética codifican:
+    -   Enzimas metabolizadoras de fármacos (p. ej., CYP450).
+    -   Transportadores de fármacos.
+    -   Receptores y otras dianas farmacológicas.
+
+## Genes CYP450: Un Ejemplo Crucial
+
+-   La superfamilia de enzimas citocromo P450 (CYP) es fundamental para el metabolismo de muchos fármacos.
+-   **Polimorfismos genéticos** en los genes CYP pueden llevar a variaciones en la actividad enzimática:
+    -   **Metabolizadores pobres (PM):** Metabolismo lento, mayor riesgo de efectos secundarios.
+    -   **Metabolizadores intermedios (IM):** Metabolismo reducido.
+    -   **Metabolizadores extensos (EM):** Metabolismo normal.
+    -   **Metabolizadores ultrarrápidos (UM):** Metabolismo muy rápido, posible falta de eficacia del fármaco.
+
+## Gen *CYP2D6*: Implicaciones Clínicas
+
+-   El gen *CYP2D6* es altamente polimórfico y metaboliza aproximadamente el 25% de los fármacos comunes.
+-   Ejemplos de fármacos afectados por la variación en *CYP2D6*:
+    -   Antidepresivos (p. ej., fluoxetina, paroxetina).
+    -   Antipsicóticos (p. ej., haloperidol, risperidona).
+    -   Analgésicos opioides (p. ej., codeína, tramadol).
+    -   Betabloqueantes (p. ej., metoprolol).
+
+## Genética de Poblaciones de *CYP2D6*
+
+-   La frecuencia de los alelos de *CYP2D6* varía significativamente entre diferentes poblaciones.
+-   Por ejemplo, los alelos asociados con el fenotipo de metabolizador ultrarrápido son más comunes en algunas poblaciones del norte de África y Oriente Medio.
+-   Estas diferencias poblacionales tienen implicaciones importantes para la dosificación de fármacos a nivel global.
+
+## Otros Genes Farmacogenéticos Relevantes
+
+-   **CYP2C19:** Metaboliza antidepresivos, inhibidores de la bomba de protones, etc.
+-   **CYP2C9:** Metaboliza warfarina, AINEs, etc.
+-   **SLCO1B1:** Codifica un transportador de estatinas; polimorfismos asociados con miopatía inducida por estatinas.
+-   **VKORC1:** Codifica la diana de la warfarina; polimorfismos influyen en la dosis requerida.
+
+## Variación Genética entre Poblaciones
+
+-   Factores evolutivos como la deriva genética, el flujo génico y la selección natural contribuyen a las diferencias en las frecuencias alélicas entre poblaciones.
+-   La historia migratoria y los eventos de cuello de botella poblacional también pueden tener un impacto significativo.
+-   Comprender esta variación es crucial para aplicar la farmacogenética de manera equitativa a nivel mundial.
+
+## Implicaciones para la Medicina Personalizada
+
+-   La genética de poblaciones proporciona el contexto para interpretar la información farmacogenética individual.
+-   Al conocer las frecuencias alélicas en diferentes grupos poblacionales, se pueden desarrollar pautas de dosificación más precisas y culturalmente sensibles.
+-   La investigación continua es esencial para descubrir nuevas variantes farmacogenéticas y comprender su distribución global.
+
+## Conclusiones
+
+-   La genética de poblaciones es fundamental para entender la variación en genes farmacogenéticos.
+-   Las diferencias en las frecuencias alélicas entre poblaciones tienen implicaciones clínicas importantes para la respuesta a los fármacos.
+-   La integración de la genética de poblaciones en la farmacogenética es crucial para avanzar hacia una medicina más personalizada y equitativa.
