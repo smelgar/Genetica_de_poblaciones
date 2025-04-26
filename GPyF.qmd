@@ -117,7 +117,7 @@ ggplot(hw_df, aes(x = p)) +
 
 -   El flujo génico permite el intercambio de alelos entre poblaciones y su consecuencia es la homogenización de las mismas.
 
-`https://cjbattey.shinyapps.io/driftR/`{=html}
+[`https://cjbattey.shinyapps.io/driftR/`{=html}](https://cjbattey.shinyapps.io/driftR/)
 
 <iframe width="900" height="10000" src="https://cjbattey.shinyapps.io/driftR/" title="Frecuencias alélicas a genotípicas suponiendo equilibrio H-W">
 
@@ -198,7 +198,7 @@ ggplot(data, aes(x=Generation, y=Frequency, color=factor(Replicate))) +
 
 ## Deriva génica
 
-`https://cjbattey.shinyapps.io/driftR/`{=html}
+[`https://cjbattey.shinyapps.io/driftR/`{=html}](https://cjbattey.shinyapps.io/driftR/)
 
 <iframe width="900" height="10000" src="https://cjbattey.shinyapps.io/driftR/" title="Frecuencias alélicas a genotípicas suponiendo equilibrio H-W">
 
@@ -358,6 +358,8 @@ p2 <- ggplot(structure_humans, aes(x=Individuo, y=value, fill=variable)) +
     -   Conservación de especies
     -   Estudios de adaptación local
     -   Antropología genética
+
+[`https://keholsinger.shinyapps.io/F-statistics/`{=html}](https://keholsinger.shinyapps.io/F-statistics/)
 
 <iframe width="900" height="10000" src="https://keholsinger.shinyapps.io/F-statistics/" title="Frecuencias alélicas a genotípicas suponiendo equilibrio H-W">
 
