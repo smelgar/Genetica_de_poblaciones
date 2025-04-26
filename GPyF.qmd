@@ -22,37 +22,36 @@ format:
     -   **Frecuencia alélica:** Proporción de un alelo específico en una población.
     -   **Frecuencia genotípica:** Proporción de un genotipo específico en una población.
     -   **Equilibrio de Hardy-Weinberg:** Un modelo nulo que describe una población no evolutiva.
-    
+
+<https://bolnicklab.shinyapps.io/Geno_to_allele_frequencies/>
+
 ```{=html}
 <iframe width="900" height="10000" src="https://bolnicklab.shinyapps.io/Geno_to_allele_frequencies/" title="Frecuencias genotípicas a alélicas"></iframe>
 ```
-    
+
 ## Equilibrio de Hardy-Weinberg
+
 **Principio básico**:
 
 $$
 p^2 + 2pq + q^2 = 1
 $$
 
-Donde:
-- $p$ = frecuencia del alelo A
+Donde: - $p$ = frecuencia del alelo A
 
-- $q$ = frecuencia del alelo a ($q = 1 - p$)
+-   $q$ = frecuencia del alelo a ($q = 1 - p$)
 
-- $p^2$ = frecuencia de AA
+-   $p^2$ = frecuencia de AA
 
-- $2pq$ = frecuencia de Aa
+-   $2pq$ = frecuencia de Aa
 
-- $q^2$ = frecuencia de aa
-
+-   $q^2$ = frecuencia de aa
 
 ## Equilibio Hardy-Weinberg
 
 $$
 p^2 + 2pq + q^2 = 1
 $$
-
-
 
 ```{r}
 #| echo: false
@@ -82,20 +81,17 @@ ggplot(hw_df, aes(x = p)) +
   theme_minimal(base_size = 14)
 ```
 
-
-
-
-
-
-
-
 ## Frecuencias alélicas a genotípicas suponiendo equilibrio H-W"
+
+<https://bolnicklab.shinyapps.io/Genotype_frequencies>
 
 ```{=html}
 <iframe width="900" height="10000" src="https://bolnicklab.shinyapps.io/Genotype_frequencies/" title="Frecuencias alélicas a genotípicas suponiendo equilibrio H-W"></iframe>
 ```
 
 ## Equilibrio Hardy-Weinberg
+
+<https://bolnicklab.shinyapps.io/HWEdemo/>
 
 ```{=html}
 <iframe  src="https://bolnicklab.shinyapps.io/HWEdemo/" title="Equilibrio Hardy-Weinberg" style="width:100%; height:150%; zoom: 0.75;"></iframe>
@@ -111,6 +107,8 @@ ggplot(hw_df, aes(x = p)) +
 -   El coeficiente de selección *s* es la reducción en la aptitud en un genotipo.
 -   La selección a favor de un homocigótico permite un aumento de la frecuencia del alelo que porta.
 
+[`https://cjbattey.shinyapps.io/driftR/`{=html}](https://cjbattey.shinyapps.io/driftR/)
+
 <iframe width="900" height="10000" src="https://cjbattey.shinyapps.io/driftR/" title="Frecuencias alélicas a genotípicas suponiendo equilibrio H-W">
 
 </iframe>
@@ -118,6 +116,8 @@ ggplot(hw_df, aes(x = p)) +
 ## Flujo génico (migración)
 
 -   El flujo génico permite el intercambio de alelos entre poblaciones y su consecuencia es la homogenización de las mismas.
+
+`https://cjbattey.shinyapps.io/driftR/`{=html}
 
 <iframe width="900" height="10000" src="https://cjbattey.shinyapps.io/driftR/" title="Frecuencias alélicas a genotípicas suponiendo equilibrio H-W">
 
@@ -196,43 +196,42 @@ ggplot(data, aes(x=Generation, y=Frequency, color=factor(Replicate))) +
   ylim(0, 1)
 ```
 
-
 ## Deriva génica
 
+`https://cjbattey.shinyapps.io/driftR/`{=html}
+
 <iframe width="900" height="10000" src="https://cjbattey.shinyapps.io/driftR/" title="Frecuencias alélicas a genotípicas suponiendo equilibrio H-W">
+
 </iframe>
 
 ## Introducción a la Estructura Poblacional
 
-- **Problema central**: Identificar agrupamientos genéticos en poblaciones naturales
-- **Aplicaciones**:
-  - Estudios de ancestría
-  - Conservación de especies
-  - Epidemiología genética
-  - Agricultura (mejoramiento de cultivos)
+-   **Problema central**: Identificar agrupamientos genéticos en poblaciones naturales
+-   **Aplicaciones**:
+    -   Estudios de ancestría
+    -   Conservación de especies
+    -   Epidemiología genética
+    -   Agricultura (mejoramiento de cultivos)
 
 ## Métodos de Análisis
 
 ### Dos enfoques complementarios:
-1. **PCA (Análisis de Componentes Principales)**
-   - Método multivariado no paramétrico
-   - Reduce dimensionalidad
 
-2. **STRUCTURE**
-   - Modelo bayesiano de agrupamiento
-   - Asume poblaciones en equilibrio de Hardy-Weinberg
-   
+1.  **PCA (Análisis de Componentes Principales)**
+    -   Método multivariado no paramétrico
+    -   Reduce dimensionalidad
+2.  **STRUCTURE**
+    -   Modelo bayesiano de agrupamiento
+    -   Asume poblaciones en equilibrio de Hardy-Weinberg
+
 ## Interpretación del PCA Genético
 
-- **Cada punto** = un individuo
-- **Ejes** = Componentes principales (combinaciones lineales de SNPs)
-- **Varianza explicada** = % de variación genética capturada
-- **Agrupamientos** = Similitud genética
+-   **Cada punto** = un individuo
+-   **Ejes** = Componentes principales (combinaciones lineales de SNPs)
+-   **Varianza explicada** = % de variación genética capturada
+-   **Agrupamientos** = Similitud genética
 
-**Ventajas**:
-- Rápido computacionalmente
-- Visualización intuitiva
-- No asume modelo poblacional
+**Ventajas**: - Rápido computacionalmente - Visualización intuitiva - No asume modelo poblacional
 
 ## Ejemplo:
 
@@ -266,11 +265,11 @@ ggplot(pca_real, aes(x=PC1, y=PC2, color=Population, label=Population)) +
 
 ## Método STRUCTURE: Fundamentos
 
-- Algoritmo bayesiano (Pritchard et al. 2000)
-- Modela individuos como mezclas de K poblaciones ancestrales
-- **Salida clave**:
-  - Coeficientes de adscripción (q)
-  - $0 \leq q \leq 1$ por individuo
+-   Algoritmo bayesiano (Pritchard et al. 2000)
+-   Modela individuos como mezclas de K poblaciones ancestrales
+-   **Salida clave**:
+    -   Coeficientes de adscripción (q)
+    -   $0 \leq q \leq 1$ por individuo
 
 ## Visualización de Resultados de STRUCTURE
 
@@ -314,7 +313,6 @@ ggplot(melted_data, aes(x=Individuo, y=value, fill=variable)) +
         panel.spacing=unit(0.1, "lines"))
 ```
 
-
 ## Ejemplo: Humanos
 
 ```{r}
@@ -353,18 +351,17 @@ p2 <- ggplot(structure_humans, aes(x=Individuo, y=value, fill=variable)) +
 
 ## Estadísticas F
 
-- **Desarrolladas por**: Sewall Wright (1951)
-- **Propósito**: Cuantificar estructuración genética poblacional
-- **Rango**: 0 (no diferenciación) a 1 (diferenciación completa)
-- **Aplicaciones**:
-  - Conservación de especies
-  - Estudios de adaptación local
-  - Antropología genética
-  
+-   **Desarrolladas por**: Sewall Wright (1951)
+-   **Propósito**: Cuantificar estructuración genética poblacional
+-   **Rango**: 0 (no diferenciación) a 1 (diferenciación completa)
+-   **Aplicaciones**:
+    -   Conservación de especies
+    -   Estudios de adaptación local
+    -   Antropología genética
+
 <iframe width="900" height="10000" src="https://keholsinger.shinyapps.io/F-statistics/" title="Frecuencias alélicas a genotípicas suponiendo equilibrio H-W">
 
 </iframe>
-
 
 ## Estadísticas F
 
@@ -389,12 +386,8 @@ f_stats <- data.frame(
 
 kable(f_stats, caption = "Principales estadísticas F de Wright", align = c("l", "l", "c", "l"))
 ```
-$H_I$ : media de la f(Aa) observada.
-$H_T$ : media de la f(Aa) esperada.
-$H_T$ : f(Aa) esperada global.
 
-
-
+$H_I$ : media de la f(Aa) observada. $H_T$ : media de la f(Aa) esperada. $H_T$ : f(Aa) esperada global.
 
 ## Otras Medidas de Distancia Poblacional
 
@@ -404,9 +397,7 @@ $$
 D = -\ln \left( \frac{J_{XY}}{\sqrt{J_X J_Y}} \right)
 $$
 
-Donde:
-- $J_X$, $J_Y$ = homocigosidad en poblaciones X e Y
-- $J_{XY}$ = heterocigosidad entre poblaciones
+Donde: - $J_X$, $J_Y$ = homocigosidad en poblaciones X e Y - $J_{XY}$ = heterocigosidad entre poblaciones
 
 ### 2. Distancia de Reynolds (1983):
 
@@ -484,27 +475,15 @@ pheatmap(dist_matrix,
          display_numbers=TRUE, number_format="%.2f")
 ```
 
-
-
-
-
 ## Aplicaciones en Genómica de Poblaciones
 
-1. **Identificación de poblaciones discretas**
-2. **Detección de selección natural**:
-   - F<sub>ST</sub> outliers
-   - Comparación con distribución neutral esperada
-3. **Diseño de estrategias de conservación**
-4. **Estudios de asociación genómica (GWAS)**:
-   - Control de estructura poblacional
-
-
-
-
-
-
-
-
+1.  **Identificación de poblaciones discretas**
+2.  **Detección de selección natural**:
+    -   F<sub>ST</sub> outliers
+    -   Comparación con distribución neutral esperada
+3.  **Diseño de estrategias de conservación**
+4.  **Estudios de asociación genómica (GWAS)**:
+    -   Control de estructura poblacional
 
 ## {background-iframe="https://bolnicklab.shinyapps.io/HWEdemo/"} {visibility="hidden"}
 
@@ -581,7 +560,5 @@ pheatmap(dist_matrix,
 -   La genética de poblaciones es fundamental para entender la variación en genes farmacogenéticos.
 -   Las diferencias en las frecuencias alélicas entre poblaciones tienen implicaciones clínicas importantes para la respuesta a los fármacos.
 -   La integración de la genética de poblaciones en la farmacogenética es crucial para avanzar hacia una medicina más personalizada y equitativa.
-
-
 
 ## Gracias
