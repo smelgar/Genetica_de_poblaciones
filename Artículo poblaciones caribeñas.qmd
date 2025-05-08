@@ -1,0 +1,41 @@
+---
+title: "Diapositivas artículo poblaciones caribeñas"
+author: "Sergio Melgar"
+format: 
+  revealjs:
+    scrollable: true
+    plugins: [notes, chalkboard]
+    chalkboard:
+       src: chalkboard.json
+editor: visual
+---
+
+## Meiosis
+
+Serie de dos divisiones nucleares en la que se producen 4 células haploides a partir de una célula madre diploide.
+
+En la primera división ocurrre intercambio genético entre cromátides de cromosomas homólogos.
+
+[![Meiosis](https://upload.wikimedia.org/wikipedia/commons/7/74/Meiosis_Stages.svg)](https://commons.wikimedia.org/wiki/File:Meiosis_Stages.svg)
+
+[![Entrecruzamiento](https://upload.wikimedia.org/wikipedia/commons/8/86/Synapsis_and_Crossing_Over_with_Labels.png)](https://commons.wikimedia.org/wiki/File:Synapsis_and_Crossing_Over_with_Labels.png)
+
+## Recombinación y entrecruzamiento
+
+Los eventos de entrecruzamiento permiten tener combinaciones nuevas entre genomas provenientes de distintas poblaciones ancestrales.
+
+[![](https://upload.wikimedia.org/wikipedia/commons/a/a3/Schematic_representation_of_genomic_mosaicism_as_a_result_of_ancestral_admixture.gif)](https://commons.wikimedia.org/wiki/File:Schematic_representation_of_genomic_mosaicism_as_a_result_of_ancestral_admixture.gif)
+
+## Desequilibrio de ligamiento a través del tiempo
+
+A medida que pasan las generaciones, el tamaño de los segmentos provenientes de una población ancestral se hacen más pequeños por los eventos de entrecruzamiento y recombinación.
+
+[![](https://upload.wikimedia.org/wikipedia/commons/c/c8/Linkage_and_Linkage_Disequilibrium.png)](https://commons.wikimedia.org/wiki/File:Linkage_and_Linkage_Disequilibrium.png)
+
+## faseo
+
+El faseo se refiere a la determinación de la proveniencia materna o paterna de cada alelo o marcador genético.
+
+Para determinar cómo se encuentran mezclados los fragmentos provenientes de distinas poblaciones ancestrales se puede emplear la secuenciación de tríos, los dos padres y un hijo.
+
+[![Ascendencia regional (específica de locus) y mestizaje en genomas colombianos. Se muestran representaciones cromosómicas con la distribución genómica de loci derivados de ascendencia africana, americana y europea, junto con sus proporciones de ascendencia a nivel de genoma, para dos individuos colombianos. Fuente: Lavanya Rishishwar et al. "Ancestry, admixture and fitness in Colombian genomes" Scientific Reports 5, Article number: 12376 (2015) doi:10.1038/srep12376 http://www.nature.com/articles/srep12376.](https://upload.wikimedia.org/wikipedia/commons/c/c0/Regional_%28locus-specific%29_ancestry_and_admixture_in_Colombian_genomes.jpg)](https://commons.wikimedia.org/wiki/File:Regional_(locus-specific)_ancestry_and_admixture_in_Colombian_genomes.jpg)
